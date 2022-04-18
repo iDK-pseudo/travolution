@@ -10,4 +10,11 @@ router.post(
   userController.signup
 );
 
+router.post(
+  "/sign-in",
+  check("emailId").isEmail().normalizeEmail().trim().escape(),
+  check("password").isStrongPassword().trim().escape(),
+  userController.signIn
+)
+
 module.exports = router;
