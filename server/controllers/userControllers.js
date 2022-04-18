@@ -17,34 +17,32 @@ exports.signup = async (req, res) => {
       });
 
       console.log(`User ${name} created!!`);
-      res.send({'status':202,'message':'User created..','name':name});
+      res.send({ status: 202, message: "User created..", name: name });
     } catch (error) {
-      res.send({'status':500,'message':error.message,'name':name});
+      res.send({ status: 500, message: error.message, name: name });
       console.log(error);
     }
   } else {
-    res.send({'status':500,'message':validationErrors,'name':name});
+    res.send({ status: 500, message: validationErrors });
   }
 };
 
-exports.signIn = async (req, res) => {
+exports.signin = async (req, res) => {
   const validationErrors = validationResult(req);
 
   if (validationErrors.isEmpty()) {
     const { emailId, password } = req.body;
     try {
-      const user = await User.findOneByEmailId(emailId)
+      const user = await User.findOneByEmailId(emailId);
 
-      if(await argon.verify(user[0].hashedPassword, password))
-        res.send({ 'status': 202, 'name': user[0].name, 'message': 'user found !' })
-      else
-        res.send({ 'status': 204, 'name': 'N/A', 'message': 'user not found !' })
-
+      if (await argon.verify(user[0].hashedPassword, password))
+        res.send({ status: 202, name: user[0].name, message: "user found !" });
+      else res.send({ status: 204, name: "N/A", message: "user not found !" });
     } catch (error) {
-      res.send({ 'status': 500, 'message': error.message });
+      res.send({ status: 500, message: error.message });
       console.log(error);
     }
   } else {
-    res.send({ 'status': 500, 'message': validationErrors });
+    res.send({ status: 500, message: validationErrors });
   }
 };
