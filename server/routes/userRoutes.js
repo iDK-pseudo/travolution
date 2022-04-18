@@ -17,4 +17,10 @@ router.post(
   userController.signin
 );
 
+router.post(
+  "/create_group",
+  check("userId").trim().escape(),
+  check("groupName").trim().escape(),
+  userController.createGroup
+);
 module.exports = router;
