@@ -11,10 +11,10 @@ router.post(
 );
 
 router.post(
-  "/sign-in",
+  "/signin",
   check("emailId").isEmail().normalizeEmail().trim().escape(),
   check("password").isStrongPassword().trim().escape(),
-  userController.signIn
-)
+  userController.signin
+);
 
 module.exports = router;
