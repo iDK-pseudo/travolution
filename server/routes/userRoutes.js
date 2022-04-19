@@ -18,7 +18,7 @@ router.post(
 );
 
 router.post(
-  "/create_group",
+  "/group",
   check("userId").trim().escape(),
   check("groupName").trim().escape(),
   userController.createGroup
