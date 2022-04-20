@@ -23,4 +23,5 @@ router.post(
   check("groupName").trim().escape(),
   userController.createGroup
 );
+
 module.exports = router;
