@@ -58,7 +58,7 @@ exports.createGroup = async (req, res) => {
       if (user) {
         const group = await Group.create({
           groupName,
-          userIds: [user],
+          memberIds: [user],
         });
         res.send({
           status: 202,
