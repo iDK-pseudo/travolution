@@ -2,6 +2,7 @@ const argon = require("argon2");
 const User = require("../models/User");
 const Group = require("../models/Group");
 const { validationResult } = require("express-validator");
+const passport = require("passport");
 
 exports.signup = async (req, res) => {
   const validationErrors = validationResult(req);
@@ -28,17 +29,24 @@ exports.signup = async (req, res) => {
   }
 };
 
-exports.signin = async (req, res) => {
+exports.signin = async (req, res, next) => {
   const validationErrors = validationResult(req);
 
   if (validationErrors.isEmpty()) {
-    const { emailId, password } = req.body;
     try {
-      const user = await User.findOneByEmailId(emailId);
+      passport.authenticate("local", (err, user, message) => {
+        if (!user) {
+          return res.send({ status: 500, message });
+        }
 
-      if (await argon.verify(user[0].hashedPassword, password))
-        res.send({ status: 202, name: user[0].name, message: "user found !" });
-      else res.send({ status: 204, name: "N/A", message: "user not found !" });
+        req.logIn(user, (error) => {
+          if (error) {
+            return next(error);
+          }
+
+          return res.send({ status: 200, user, message });
+        });
+      })(req, res, next);
     } catch (error) {
       res.send({ status: 500, message: error.message });
       console.log(error);
